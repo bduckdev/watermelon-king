@@ -1,0 +1,15 @@
+.bar-container {
+  width: 100%;
+  background-color: grey;
+}
+.bar {
+  width: 0%;
+  background-color: red;
+  color: yellow;
+}
+.building-image {
+  max-width: 200px;
+}
+.hidden {
+  display: none;
+}
