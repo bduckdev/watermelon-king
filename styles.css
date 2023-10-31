@@ -1,11 +1,29 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 180px;
+}
+.header__display-div {
+}
+.header__nav {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
 .buildings {
   list-style: none;
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 .building {
   display: flex;
   flex-direction: column;
+  border-style: solid;
+  border-color: pink;
+  padding: 15px;
+  text-align: center;
 }
 .bar-container {
   width: 100%;

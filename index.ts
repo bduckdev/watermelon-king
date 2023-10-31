@@ -34,7 +34,7 @@ class gameWorld {
   updateDisplay() {
     if (worldDisplay && scoreDisplay !== null) {
       worldDisplay.innerText = this.name;
-      scoreDisplay.innerText = "Score: $" + this.score;
+      scoreDisplay.innerText = "Score: $" + Math.round(this.score * 100) / 100;
     } else {
       alert("error: gameWorld is null!");
     }
@@ -171,11 +171,10 @@ class building {
 }
 
 // main part
-//
 
 const earth = new gameWorld({
   name: "Earth",
-  score: 0,
+  score: 500,
 });
 
 let buildingsArr = [
@@ -192,8 +191,8 @@ let buildingsArr = [
     isRunning: false,
   }),
   new building({
-    name: "Bananas",
-    image: "./images/bananas.png",
+    name: "Animal Husbandry",
+    image: "./images/capybara.png",
     amount: 0,
     cost: 5,
     world: earth,
@@ -204,8 +203,8 @@ let buildingsArr = [
     isRunning: false,
   }),
   new building({
-    name: "Coconuts",
-    image: "./images/coconuts.png",
+    name: "Farmer",
+    image: "./images/farmer.png",
     amount: 0,
     cost: 15,
     world: earth,
@@ -216,8 +215,8 @@ let buildingsArr = [
     isRunning: false,
   }),
   new building({
-    name: "Fracking",
-    image: "./images/fracking.png",
+    name: "Watermelon Farm",
+    image: "./images/farm.png",
     amount: 0,
     cost: 100,
     world: earth,
@@ -239,6 +238,8 @@ let currentWorld = {
     }
   },
 };
+
+//global event listeners
 
 currentWorld.renderBuildings();
 earth.updateDisplay();

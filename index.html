@@ -7,10 +7,29 @@
     <title>Watermelon King!</title>
   </head>
   <body>
-    <h1 class="title">Watermelon King!</h1>
-    <h2 class="subtitle">Click the object to make money!</h2>
-    <h2 class="world">WORLD PLACEHOLDER</h2>
-    <h2 class="score">SCORE PLACEHOLDER</h2>
+    <header class="header">
+      <div class="header__title-div">
+        <h1 class="title">Watermelon King!</h1>
+        <h2 class="subtitle">Click the object to make money!</h2>
+      </div>
+      <div class="header__display-div"></div>
+      <h2 class="world">WORLD PLACEHOLDER</h2>
+      <h2 class="score">SCORE PLACEHOLDER</h2>
+      <div class="header__nav">
+        <div>
+          <button class="header__nav-button" id="stats-button">Stats</button>
+          <button class="header__nav-button" id="upgrades-button">
+            Upgrades
+          </button>
+        </div>
+        <div>
+          <button class="header__nav-button" id="managers-button">
+            Managers
+          </button>
+          <button class="header__nav-button" id="reset-button">Reset</button>
+        </div>
+      </div>
+    </header>
     <ul class="buildings"></ul>
   </body>
   <script src="./index.js"></script>
