@@ -1,8 +1,6 @@
 const worldDisplay: HTMLElement = document.querySelector(".world")!;
 const scoreDisplay: HTMLElement = document.querySelector(".score")!;
 const buildingListEl: HTMLElement = document.querySelector(".buildings")!;
-const buildingTemplate: HTMLUListElement = document.querySelector(".building")!;
-const buildingBuyButton: HTMLElement = document.querySelector(".building-buy")!;
 
 // CONSTRUCTOR ATTRIBUTE TYPES
 
@@ -32,7 +30,6 @@ class gameWorld {
   }
   name: string;
   score: number;
-  buildings = [];
 
   updateDisplay() {
     if (worldDisplay && scoreDisplay !== null) {
@@ -70,9 +67,9 @@ class building {
   isRunning;
 
   buildingEl = document.createElement("li");
+  buildingAmountEl = document.createElement("p");
   buildingImageEl = document.createElement("img");
   buildingNameEl = document.createElement("p");
-  buildingAmountEl = document.createElement("p");
   buildingBarContainerEl = document.createElement("div");
   buildingProgressBarEl = document.createElement("div");
   buildingBuyButtonEl = document.createElement("button");
@@ -81,9 +78,11 @@ class building {
     let costMul = this.cost * quantity;
     let incomeMul = this.baseIncome * quantity;
     if (this.cost <= this.world.score) {
-      this.world.score = this.world.score - costMul;
+      this.world.score = Math.round((this.world.score - costMul) * 100) / 100;
       this.amount = this.amount + quantity;
       this.income = this.income + incomeMul;
+      this.cost = this.cost * 1.15;
+      this.cost = Math.round(this.cost * 100) / 100;
       this.world.updateDisplay();
       this.updateDisplay();
     } else {
@@ -103,27 +102,27 @@ class building {
     this.buildingNameEl.innerText = this.name;
     this.buildingEl.append(this.buildingNameEl);
 
-    if (this.amount !== 0) {
-      this.buildingAmountEl.classList.add("building-amount");
-      this.buildingAmountEl.innerText = "Amount: " + this.amount;
-      this.buildingEl.append(this.buildingAmountEl);
+    this.buildingBarContainerEl.classList.add("bar-container");
+    this.buildingEl.append(this.buildingBarContainerEl);
 
-      this.buildingBarContainerEl.classList.add("bar-container");
-      this.buildingEl.append(this.buildingBarContainerEl);
+    this.buildingProgressBarEl.classList.add("bar");
+    this.buildingProgressBarEl.innerText = "$" + this.income;
+    this.buildingBarContainerEl.append(this.buildingProgressBarEl);
 
-      this.buildingProgressBarEl.classList.add("bar");
-      this.buildingProgressBarEl.innerText = "$" + this.income;
-      this.buildingBarContainerEl.append(this.buildingProgressBarEl);
-    }
+    this.buildingAmountEl.classList.add("building-amount");
+    this.buildingAmountEl.innerText = "Amount: " + this.amount;
+    this.buildingEl.append(this.buildingAmountEl);
 
     this.buildingBuyButtonEl.classList.add("building-buy");
-    this.buildingBuyButtonEl.innerText = "Cost: $" + this.cost;
+    this.buildingBuyButtonEl.innerText = "Buy: $" + this.cost;
     this.buildingEl.append(this.buildingBuyButtonEl);
 
     buildingListEl.append(this.buildingEl);
 
+    // wont render progress bar if you don't have any
     if (this.amount === 0) {
-      //  this.buildingEl.classList.add("hidden");
+      this.buildingProgressBarEl.classList.add("hidden");
+      this.buildingAmountEl.classList.add("hidden");
     }
 
     // EVENT LISTENERS
@@ -143,7 +142,13 @@ class building {
   updateDisplay() {
     this.buildingProgressBarEl.innerText = "$" + this.income;
     this.buildingAmountEl.innerText = "Amount: " + this.amount;
-    this.buildingBuyButtonEl.innerText = "Cost: $" + this.cost;
+    this.buildingBuyButtonEl.innerText = "Buy: $" + this.cost;
+    this.buildingAmountEl.innerText = "Amount: " + this.amount;
+    this.buildingProgressBarEl.innerText = "$" + this.income;
+    if (this.amount !== 0) {
+      this.buildingProgressBarEl.classList.remove("hidden");
+      this.buildingAmountEl.classList.remove("hidden");
+    }
   }
 
   run() {
@@ -170,7 +175,7 @@ class building {
 
 const earth = new gameWorld({
   name: "Earth",
-  score: 500,
+  score: 0,
 });
 
 let buildingsArr = [
@@ -187,14 +192,38 @@ let buildingsArr = [
     isRunning: false,
   }),
   new building({
-    name: "Coconuts",
-    image: "./images/coconuts.png",
+    name: "Bananas",
+    image: "./images/bananas.png",
     amount: 0,
     cost: 5,
     world: earth,
     baseIncome: 5,
     income: 0,
     speed: 5000,
+    hasManager: false,
+    isRunning: false,
+  }),
+  new building({
+    name: "Coconuts",
+    image: "./images/coconuts.png",
+    amount: 0,
+    cost: 15,
+    world: earth,
+    baseIncome: 15,
+    income: 0,
+    speed: 10000,
+    hasManager: false,
+    isRunning: false,
+  }),
+  new building({
+    name: "Fracking",
+    image: "./images/fracking.png",
+    amount: 0,
+    cost: 100,
+    world: earth,
+    baseIncome: 100,
+    income: 0,
+    speed: 25000,
     hasManager: false,
     isRunning: false,
   }),
@@ -212,34 +241,4 @@ let currentWorld = {
 };
 
 currentWorld.renderBuildings();
-
-/*
-const watermelons = new building({
-  name: "Watermelons",
-  image: "./images/watermelons.png",
-  amount: 1,
-  cost: 1,
-  world: earth,
-  baseIncome: 1,
-  income: 1,
-  speed: 2500,
-  hasManager: false,
-  isRunning: false,
-});
-
-const coconuts = new building({
-  name: "Coconuts",
-  image: "./images/coconuts.png",
-  amount: 0,
-  cost: 5,
-  world: earth,
-  baseIncome: 5,
-  income: 0,
-  speed: 5000,
-  hasManager: false,
-  isRunning: false,
-});
-watermelons.render();
-coconuts.render();
-*/
 earth.updateDisplay();

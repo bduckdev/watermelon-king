@@ -1,3 +1,12 @@
+.buildings {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+}
+.building {
+  display: flex;
+  flex-direction: column;
+}
 .bar-container {
   width: 100%;
   background-color: grey;
@@ -8,7 +17,8 @@
   color: yellow;
 }
 .building-image {
-  max-width: 200px;
+  width: 200px;
+  height: 200px;
 }
 .hidden {
   display: none;
