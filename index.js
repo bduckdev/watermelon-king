@@ -1,6 +1,11 @@
 "use strict";
+// HEADER
 const worldDisplay = document.querySelector(".world");
 const scoreDisplay = document.querySelector(".score");
+// MENU
+const upgradesButtonEl = document.querySelector("#upgrades-button");
+const upgradesModal = document.querySelector(".upgrades__modal");
+// BODY
 const buildingListEl = document.querySelector(".buildings");
 // CLASSES
 class gameWorld {
@@ -130,7 +135,7 @@ class building {
 //
 const earth = new gameWorld({
     name: "Earth",
-    score: 500,
+    score: 0,
 });
 let buildingsArr = [
     new building({
@@ -194,3 +199,7 @@ let currentWorld = {
 };
 currentWorld.renderBuildings();
 earth.updateDisplay();
+// menu test
+upgradesButtonEl.addEventListener("click", () => {
+    upgradesModal.classList.remove("hidden");
+});

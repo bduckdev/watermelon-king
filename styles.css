@@ -1,4 +1,5 @@
 .header {
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   margin-bottom: 180px;
@@ -6,9 +7,23 @@
 .header__display-div {
 }
 .header__nav {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  margin-top:;
+}
+.modal {
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 .buildings {
   list-style: none;
@@ -28,11 +43,11 @@
 .bar-container {
   width: 100%;
   background-color: grey;
+  color: yellow;
 }
 .bar {
   width: 0%;
   background-color: red;
-  color: yellow;
 }
 .building-image {
   width: 200px;

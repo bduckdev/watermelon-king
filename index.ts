@@ -1,5 +1,11 @@
+// HEADER
 const worldDisplay: HTMLElement = document.querySelector(".world")!;
 const scoreDisplay: HTMLElement = document.querySelector(".score")!;
+// MENU
+const upgradesButtonEl: HTMLButtonElement =
+  document.querySelector("#upgrades-button")!;
+const upgradesModal: HTMLElement = document.querySelector(".upgrades__modal")!;
+// BODY
 const buildingListEl: HTMLElement = document.querySelector(".buildings")!;
 
 // CONSTRUCTOR ATTRIBUTE TYPES
@@ -171,10 +177,11 @@ class building {
 }
 
 // main part
+//
 
 const earth = new gameWorld({
   name: "Earth",
-  score: 500,
+  score: 0,
 });
 
 let buildingsArr = [
@@ -239,7 +246,10 @@ let currentWorld = {
   },
 };
 
-//global event listeners
-
 currentWorld.renderBuildings();
 earth.updateDisplay();
+
+// menu test
+upgradesButtonEl.addEventListener("click", () => {
+  upgradesModal.classList.remove("hidden");
+});
