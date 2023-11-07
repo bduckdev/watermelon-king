@@ -5,6 +5,9 @@ const scoreDisplay: HTMLElement = document.querySelector(".score")!;
 const upgradesButtonEl: HTMLButtonElement =
   document.querySelector("#upgrades-button")!;
 const upgradesModal: HTMLElement = document.querySelector(".upgrades__modal")!;
+const managersButtonEl: HTMLButtonElement =
+  document.querySelector("#managers-button")!;
+const managersModal: HTMLElement = document.querySelector(".managers__modal")!;
 // BODY
 const buildingListEl: HTMLElement = document.querySelector(".buildings")!;
 
@@ -168,7 +171,11 @@ class building {
       }, this.speed);
     } else if (this.hasManager === true) {
       setInterval(() => {
-        console.log("test");
+        this.buildingProgressBarEl.animate({ width: "100%" }, this.speed);
+        this.world.score = this.world.score + this.income;
+        this.world.updateDisplay();
+        this.updateDisplay();
+        this.isRunning = false;
       }, this.speed);
     } else {
       return;
@@ -252,4 +259,7 @@ earth.updateDisplay();
 // menu test
 upgradesButtonEl.addEventListener("click", () => {
   upgradesModal.classList.remove("hidden");
+});
+managersButtonEl.addEventListener("click", () => {
+  managersModal.classList.remove("hidden");
 });
