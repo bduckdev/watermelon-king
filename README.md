@@ -12,6 +12,4 @@ TypeScript
 
 Planned
 
-Make it full stack
-    Go (for web server)
-    HTMX (communicating with web server)
+Make it full stack via Go (maybe rust if i feel spicy) and HTMX
