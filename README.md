@@ -1,3 +1,7 @@
+# DEPRECATED
+# TURNING INTO REACT APP OR SOMETHING :(
+
+
 # watermelon-king
 
 Probably the greatest game of all time. click the buttons to acquire watermelons. Collect enough to become the watermelon king.
