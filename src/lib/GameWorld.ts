@@ -33,24 +33,15 @@ export class GameWorld {
   score: Writable<number>;
   theme: string;
   buildings: Building[];
-  amountToBuy: Writable<number>;
-  constructor({
-    name,
-    score,
-    buildings,
-    theme,
-    amountToBuy,
-  }: GameWorldConstructor) {
+  constructor({ name, score, buildings, theme }: GameWorldConstructor) {
     this.name = name;
     this.score = writable(score);
     this.theme = theme;
-    this.amountToBuy = amountToBuy;
     const buildingMachine = buildings.map(
       (building) =>
         new Building({
           name: building.name,
           worldScore: this.score,
-          amountToBuy: this.amountToBuy,
           amount: building.amount,
           image: building.image,
           description: building.description,
@@ -81,7 +72,6 @@ export class GameWorld {
     const data = {
       name: this.name,
       score: this.getWorldScore(),
-      amountToBuy: this.amountToBuy,
       buildings: [
         // amount
         // ismanaged
@@ -95,11 +85,12 @@ export class GameWorld {
           isPurchased: upgrade.getIsPurchased(),
         };
       });
-      console.log("upgrades", upgrades);
+      //console.log("upgrades", upgrades);
       let amount = building.getAmount();
       let isManaged = building.getIsManaged();
-      console.log(building, building.name, amount, isManaged);
+      console.log(building, building.name, amount, isManaged, upgrades);
     });
+    console.log(data);
     return data;
     //localStorage.setItem("saveData", JSON.stringify(world));
   };
