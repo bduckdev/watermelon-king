@@ -25,7 +25,7 @@
 </script>
 
 <div class="flex justify-evenly py-2 mx-8">
-    <p class="pt-2 pb-5 text-3xl font-black text-primary">
+    <p class="pt-2 pb-5 text-3xl font-black">
         ${handleNumberDisplay(+$score)}
     </p>
     <!--

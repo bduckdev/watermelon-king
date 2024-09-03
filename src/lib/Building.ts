@@ -15,6 +15,7 @@ export type BuildingConstructor = {
   manager: ManagerType;
   upgrades: UngoodUpgradeConstructor[];
   achievments: UngoodAchievmentConstructor[];
+  isManaged: boolean;
 };
 export type UngoodUpgradeConstructor = {
   name: string;
@@ -48,6 +49,8 @@ export class Building {
   achievments: Achievment[];
   canBuy: Writable<boolean>;
   nextAchievmentAt: Writable<Number>;
+  baseIncome: number;
+  isManaged: Writable<Boolean>;
 
   constructor({
     name,
@@ -61,6 +64,7 @@ export class Building {
     manager,
     upgrades,
     achievments,
+    isManaged,
   }: BuildingConstructor) {
     this.name = name;
     this.image = image;
@@ -73,35 +77,51 @@ export class Building {
     this.speed = writable(speed);
     this.isFast = writable(false);
     this.worldScore = worldScore;
+    this.baseIncome = baseIncome;
     this.manager = manager;
     this.upgradeMultiplier = writable(1);
     this.canBuy = writable(false);
-    this.nextAchievmentAt = writable(achievments[0].requirement);
-    this.upgrades = upgrades.map(
-      (upgrade) =>
-        new Upgrade({
-          name: upgrade.name,
-          multiplier: upgrade.multiplier,
-          isPurchased: upgrade.isPurchased,
-          description: upgrade.description,
-          gameScore: this.worldScore,
-          handleUpgradeMultiplier: this.handleUpgrade,
-          cost: upgrade.cost,
-        }),
-    );
+    this.isManaged = writable(isManaged);
+    function initNextAchievment() {
+      let unachieved = [];
+      for (let i = 0; i < achievments.length; i++) {
+        if (achievments[i].requirement > amount) {
+          unachieved.push(achievments[i]);
+        }
+      }
+      if (unachieved.length > 0) {
+        return unachieved[0].requirement;
+      }
+      return 0;
+    }
+    this.nextAchievmentAt = writable(initNextAchievment());
+    this.upgrades = upgrades.map((upgrade) => {
+      if (upgrade.isPurchased === true) {
+        this.upgradeMultiplier.update((m) => m * upgrade.multiplier);
+        this.income.update((v) => v * upgrade.multiplier);
+      }
+      return new Upgrade({
+        name: upgrade.name,
+        multiplier: upgrade.multiplier,
+        isPurchased: upgrade.isPurchased,
+        description: upgrade.description,
+        gameScore: this.worldScore,
+        handleUpgradeMultiplier: this.handleUpgrade,
+        cost: upgrade.cost,
+      });
+    });
     this.achievments = achievments.map(
       (achievment) =>
         new Achievment({
           name: achievment.name,
           requirement: achievment.requirement,
-          isAchieved: writable(false),
+          isAchieved: writable(achievment.isAchieved),
           quantity: this.amount,
           multiplier: achievment.multiplier,
           speed: this.speed,
         }),
     );
   }
-  isManaged: Writable<boolean> = writable(false);
   isRunning: Writable<boolean> = writable(false);
 
   public getAmount = () => {
@@ -119,7 +139,7 @@ export class Building {
     let speed = this.getSpeed()!;
     this.countdown.update((c) => (c = speed / 100));
   };
-  private getCost = () => {
+  public getCost = () => {
     //this should simply get the cost store and return the value based on the cost times the amount
     let cost;
     this.cost.subscribe((c) => (cost = c));
@@ -223,7 +243,7 @@ export class Building {
     }
   };
 
-  private getSpeed = () => {
+  public getSpeed = () => {
     let speed;
     this.speed.subscribe((s) => (speed = s));
     return speed;
@@ -249,6 +269,12 @@ export class Building {
     const speed = this.getSpeed();
     const isFast = this.getIsFast()!;
     this.isRunning.update((b) => (b = true));
+    for (let i = 0; i < this.upgrades.length; i++) {
+      this.upgrades[i].getCanBuy();
+    }
+    this.upgrades.forEach((upgrade) => {
+      upgrade.getCanBuy();
+    });
     if (!isRunning) {
       let progInterval: number;
       let countdownInterval: number;
@@ -300,9 +326,12 @@ export class Building {
       return;
     }
   };
-  private checkAchievments = () => {
+  public checkAchievments = () => {
     this.achievments.forEach((achievment) => {
-      achievment.handleAchievment();
+      const isAch = achievment.handleAchievment();
+      if (isAch) {
+        this.incrementScore(this.getIncome()!);
+      }
     });
     this.resetCountdown();
   };
@@ -320,13 +349,5 @@ export class Building {
   };
   private incrementScore = (n: number) => {
     this.worldScore.update((s) => (s = +(s + n).toFixed(2)));
-  };
-  public getCurrentState = () => {
-    /*
-            amount
-        income
-        speed
-        cost
-        */
   };
 }

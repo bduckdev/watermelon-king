@@ -12,6 +12,7 @@ export type UngoodAchievmentConstructor = {
   name: string;
   requirement: number;
   multiplier: number;
+  isAchieved: boolean;
 };
 
 export class Achievment {
@@ -52,11 +53,12 @@ export class Achievment {
   public handleAchievment = () => {
     const quantity = this.getQuantity();
     if (this.getIsAchieved()) {
-      return;
+      return false;
     }
     if (quantity! >= this.requirement) {
       this.speed.update((speed) => speed / this.multiplier);
       this.isAchieved.update((a) => (a = true));
+      return true;
     }
   };
 }
